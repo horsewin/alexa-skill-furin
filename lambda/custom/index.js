@@ -1,24 +1,39 @@
 /* eslint-disable  func-names */
 /* eslint-disable  no-console */
 /* eslint-disable  no-restricted-syntax */
-
 'use strict';
+
+//------------------------------------------------------
+// ライブラリ定義
+//------------------------------------------------------
+/**
+ * Alexa開発に用いるSDKライブラリ
+ */
 const Alexa = require('ask-sdk-core');
 
-/* LAMBDA SETUP */
-exports.handler = skillBuilder
-    .addRequestHandlers(
-        LaunchRequestHandler,
-        QuizHandler,
-        DefinitionHandler,
-        QuizAnswerHandler,
-        RepeatHandler,
-        HelpHandler,
-        ExitHandler,
-        SessionEndedRequestHandler
-    )
-    .addErrorHandlers(ErrorHandler)
-    .lambda();
+/**
+ * 応答を組み立てるためのライブラリ
+ */
+const util = require('util');
+
+//------------------------------------------------------
+// 変数・定数定義
+//------------------------------------------------------
+/**
+ * メッセージ格納変数
+ */
+const MESSAGE = require("./message");
+
+/**
+ * 状態定義クラス
+ */
+const state = require("./state");
+
+/**
+ * 風鈴の種類定義
+ * @type {string[]}
+ */
+const furin = ["daiso", "nanbu_mie", "nousaku", "otaru"];
 
 /* INTENT HANDLERS */
 const LaunchRequestHandler = {
@@ -26,59 +41,82 @@ const LaunchRequestHandler = {
         return handlerInput.requestEnvelope.request.type === `LaunchRequest`;
     },
     handle(handlerInput) {
+        const num = Math.floor((Math.random() * 4));
+        const targetFurin = furin[num];
+        const description = MESSAGE.furin[targetFurin];
+
         return handlerInput.responseBuilder
-            .speak(welcomeMessage)
-            .reprompt(helpMessage)
+            .speak(util(MESSAGE.login.speak, targetFurin, description))
             .getResponse();
     },
 };
 
-exports.handler = function(event, context) {
-    const alexa = Alexa.handler(event, context);
-    alexa.appId = process.env.APP_ID;
-    alexa.registerHandlers(LaunchRequestHandler);
-    alexa.execute();
+const HelpHandler = {
+    canHandle(handlerInput) {
+        const request = handlerInput.requestEnvelope.request;
+        return request.type === 'IntentRequest' &&
+            request.intent.name === 'AMAZON.HelpHandler';
+    },
+    handle(handlerInput) {
+        return handlerInput.responseBuilder
+            .speak(MESSAGE.help.speak)
+            .reprompt(MESSAGE.help.reprompt)
+            .getResponse();
+    },
 };
 
-const LaunchRequestHandler = {
-    'LaunchRequest': function () {
-        this.emit('SayHello');
+const ExitHandler = {
+    canHandle(handlerInput) {
+        const attributes = handlerInput.attributesManager.getSessionAttributes();
+        const request = handlerInput.requestEnvelope.request;
+
+        return request.type === `IntentRequest` && (
+            request.intent.name === 'AMAZON.StopIntent' ||
+            request.intent.name === 'AMAZON.PauseIntent' ||
+            request.intent.name === 'AMAZON.CancelIntent'
+        );
     },
-    'HelloWorldIntent': function () {
-        this.emit('SayHello');
+    handle(handlerInput) {
+        return handlerInput.responseBuilder
+            .speak(MESSAGE.exit.speak)
+            .getResponse();
     },
-    'MyNameIsIntent': function () {
-        this.emit('SayHelloName');
-    },
-    'SayHello': function () {
-        this.response.speak('Hello World!')
-                     .cardRenderer('hello world', 'hello world');
-        this.emit(':responseReady');
-    },
-    'SayHelloName': function () {
-        const name = this.event.request.intent.slots.name.value;
-        this.response.speak('Hello ' + name)
-            .cardRenderer('hello world', 'hello ' + name);
-        this.emit(':responseReady');
-    },
-    'SessionEndedRequest' : function() {
-        console.log('Session ended with reason: ' + this.event.request.reason);
-    },
-    'AMAZON.StopIntent' : function() {
-        this.response.speak('Bye');
-        this.emit(':responseReady');
-    },
-    'AMAZON.HelpIntent' : function() {
-        this.response.speak("You can try: 'alexa, hello world' or 'alexa, ask hello world my" +
-            " name is awesome Aaron'");
-        this.emit(':responseReady');
-    },
-    'AMAZON.CancelIntent' : function() {
-        this.response.speak('Bye');
-        this.emit(':responseReady');
-    },
-    'Unhandled' : function() {
-        this.response.speak("Sorry, I didn't get that. You can try: 'alexa, hello world'" +
-            " or 'alexa, ask hello world my name is awesome Aaron'");
-    }
 };
+
+const SessionEndedRequestHandler = {
+    canHandle(handlerInput) {
+        console.log("Inside SessionEndedRequestHandler");
+        return handlerInput.requestEnvelope.request.type === 'SessionEndedRequest';
+    },
+    handle(handlerInput) {
+        console.log(`Session ended with reason: ${JSON.stringify(handlerInput.requestEnvelope)}`);
+        return handlerInput.responseBuilder.getResponse();
+    },
+};
+
+const ErrorHandler = {
+    canHandle() {
+        console.log("Inside ErrorHandler");
+        return true;
+    },
+    handle(handlerInput, error) {
+        console.log(`Error handled: ${JSON.stringify(error)}`);
+        console.log(`Handler Input: ${JSON.stringify(handlerInput)}`);
+
+        return handlerInput.responseBuilder
+            .speak(MESSAGE.error.speak)
+            .reprompt(MESSAGE.error.reprompt)
+            .getResponse();
+    },
+};
+
+/* LAMBDA SETUP */
+exports.handler = skillBuilder
+    .addRequestHandlers(
+        LaunchRequestHandler,
+        HelpHandler,
+        ExitHandler,
+        SessionEndedRequestHandler
+    )
+    .addErrorHandlers(ErrorHandler)
+    .lambda();
