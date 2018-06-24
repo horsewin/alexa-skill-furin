@@ -1,7 +1,7 @@
 {
   "interactionModel": {
     "languageModel": {
-      "invocationName": "風鈴の音",
+      "invocationName": "今日の風鈴",
       "types": [
         {
           "name": "FURIN_TYPE",

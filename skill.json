@@ -3,20 +3,22 @@
     "publishingInformation": {
       "locales": {
         "ja-JP": {
-          "summary": "",
+          "summary": "夏を涼しく感じさせるために、風鈴の音を奏でてくれるスキルです。",
           "examplePhrases": [
-            "アレクサ、風鈴の音を開いて",
-            "アレクサ、風鈴の音を起動して",
-            "アレクサ、風鈴の音を開いて、小樽の音を聞かせて"
+            "アレクサ、今日の風鈴を開いて",
+            "アレクサ、今日の風鈴を起動して",
+            "アレクサ、今日の風鈴を開いて、小樽の音を聞かせて"
           ],
-          "name": "風鈴の音",
-          "description": ""
+          "name": "今日の風鈴",
+          "description": "風鈴の音を奏でてくれるスキルです。\n　スキルを起動するとランダムで風鈴の音が再生されます。現在再生可能な風鈴の種類は下記の4種類です。\n１．南部鉄器\n２．能作風鈴\n３．小樽風鈴（ガラス）\n４．ダイソーの風鈴\n。お気に入りの風鈴を見つけたらスキルを起動するときに、風鈴名を入れて起動してください。\n\n本スキルの風鈴の音は下記のクリエイティブ・コモンズ・ライセンスのページから利用しております。\n・AVONSEARIDER様\n・風鈴　１２種類聴き比べ\n・https://www.youtube.com/watch?v=ZJVSjhYwQpE"
         }
       },
       "isAvailableWorldwide": true,
-      "testingInstructions": "1) 'アレクサ、風鈴の音を開いて'と言って",
+      "testingInstructions": "1) 'アレクサ、今日の風鈴を開いて'と言って",
       "category": "HEALTH_AND_FITNESS",
-      "distributionCountries": []
+      "distributionCountries": [
+        "JP"
+      ]
     },
     "apis": {
       "custom": {
@@ -25,6 +27,18 @@
         }
       }
     },
-    "manifestVersion": "1.0"
+    "manifestVersion": "1.0",
+    "privacyAndCompliance": {
+      "allowsPurchases": false,
+      "usesPersonalInfo": false,
+      "isChildDirected": false,
+      "isExportCompliant": true,
+      "containsAds": false,
+      "locales": {
+        "ja-JP": {
+          "privacyPolicyUrl": "https://docs.google.com/document/d/1CROOhNuM8NIFQfXRk3Goqc0CB6KT8HAlahxtc6V1c3M/edit?usp=sharing"
+        }
+      }
+    }
   }
 }

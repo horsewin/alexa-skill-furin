@@ -62,11 +62,13 @@ exports.handler = async (event: RequestEnvelope, context: any) => {
 /* INTENT HANDLERS */
 const LaunchRequestHandler = {
   canHandle(handlerInput: Alexa.HandlerInput) {
+    console.log("Inside LaunchRequestHandler");
     return handlerInput.requestEnvelope.request.type === `LaunchRequest`;
   },
   handle(handlerInput: Alexa.HandlerInput) {
     const num = Math.floor((Math.random() * 4));
     const targetFurin = furin[num];
+    console.log(`${targetFurin}`);
     const description = MESSAGE.furin[targetFurin];
 
     return handlerInput.responseBuilder

@@ -61,11 +61,13 @@ exports.handler = (event, context) => __awaiter(this, void 0, void 0, function* 
 /* INTENT HANDLERS */
 const LaunchRequestHandler = {
     canHandle(handlerInput) {
+        console.log("Inside LaunchRequestHandler");
         return handlerInput.requestEnvelope.request.type === `LaunchRequest`;
     },
     handle(handlerInput) {
         const num = Math.floor((Math.random() * 4));
         const targetFurin = furin[num];
+        console.log(`${targetFurin}`);
         const description = MESSAGE.furin[targetFurin];
         return handlerInput.responseBuilder
             .speak(util(MESSAGE.login.speak, targetFurin, description))
