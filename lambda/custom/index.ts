@@ -1,19 +1,19 @@
-'use strict';
+"use strict";
 
-//------------------------------------------------------
+// ------------------------------------------------------
 // ライブラリ定義
-//------------------------------------------------------
-import * as Alexa from 'ask-sdk';
-import {IntentRequest, RequestEnvelope} from 'ask-sdk-model';
+// ------------------------------------------------------
+import * as Alexa from "ask-sdk";
+import {IntentRequest, RequestEnvelope} from "ask-sdk-model";
 
 /**
  * 応答を組み立てるためのライブラリ
  */
-const util = require('util');
+const util = require("util");
 
-//------------------------------------------------------
+// ------------------------------------------------------
 // 変数・定数定義
-//------------------------------------------------------
+// ------------------------------------------------------
 /**
  * メッセージ格納変数
  */
@@ -37,26 +37,27 @@ const ER_SUCCESS_MATCH = "ER_SUCCESS_MATCH";
  */
 const ER_SUCCESS_NO_MATCH = "ER_SUCCESS_NO_MATCH";
 
-//------------------------------------------------------
+// ------------------------------------------------------
 
 let skill: Alexa.Skill;
 
 /* LAMBDA SETUP */
-exports.handler = async function (event: RequestEnvelope, context: any) {
+exports.handler = async (event: RequestEnvelope, context: any) => {
   console.log(JSON.stringify(event, null, 2));
   if (!skill) {
     skill = Alexa.SkillBuilders.custom()
       .addRequestHandlers(
         LaunchRequestHandler,
+        TypeRequestHandler,
         HelpHandler,
         ExitHandler,
-        SessionEndedRequestHandler
+        SessionEndedRequestHandler,
       )
       .addErrorHandlers(ErrorHandler)
       .create();
   }
   return skill.invoke(event, context);
-}
+};
 
 /* INTENT HANDLERS */
 const LaunchRequestHandler = {
@@ -77,12 +78,12 @@ const LaunchRequestHandler = {
 const TypeRequestHandler = {
   canHandle(handlerInput: Alexa.HandlerInput) {
     const request = handlerInput.requestEnvelope.request;
-    return request.type === 'IntentRequest' && (
-      request.intent.name === 'TypeIntent'
+    return request.type === "IntentRequest" && (
+      request.intent.name === "TypeIntent"
     );
   },
   handle(handlerInput: Alexa.HandlerInput) {
-    //GET REQUEST ATTRIBUTE
+    // GET REQUEST ATTRIBUTE
     const req: IntentRequest = handlerInput.requestEnvelope.request as IntentRequest;
     const slot = req.intent.slots.FurinType;
 
@@ -101,15 +102,15 @@ const TypeRequestHandler = {
         .reprompt(MESSAGE.error.reprompt)
         .getResponse();
     }
-  }
+  },
 };
 
 const HelpHandler = {
   canHandle(handlerInput: Alexa.HandlerInput) {
     const request = handlerInput.requestEnvelope.request;
-    return request.type === 'IntentRequest' && (
-      request.intent.name === 'AMAZON.HelpIntent' ||
-      request.intent.name === 'AMAZON.HelpHandler'
+    return request.type === "IntentRequest" && (
+      request.intent.name === "AMAZON.HelpIntent" ||
+      request.intent.name === "AMAZON.HelpHandler"
     );
   },
   handle(handlerInput: Alexa.HandlerInput) {
@@ -126,8 +127,8 @@ const ExitHandler = {
     const request = handlerInput.requestEnvelope.request;
 
     return request.type === `IntentRequest` && (
-      request.intent.name === 'AMAZON.StopIntent' ||
-      request.intent.name === 'AMAZON.CancelIntent'
+      request.intent.name === "AMAZON.StopIntent" ||
+      request.intent.name === "AMAZON.CancelIntent"
     );
   },
   handle(handlerInput: Alexa.HandlerInput) {
@@ -140,7 +141,7 @@ const ExitHandler = {
 const SessionEndedRequestHandler = {
   canHandle(handlerInput: Alexa.HandlerInput) {
     console.log("Inside SessionEndedRequestHandler");
-    return handlerInput.requestEnvelope.request.type === 'SessionEndedRequest';
+    return handlerInput.requestEnvelope.request.type === "SessionEndedRequest";
   },
   handle(handlerInput: Alexa.HandlerInput) {
     console.log(`Session ended with reason: ${JSON.stringify(handlerInput.requestEnvelope)}`);

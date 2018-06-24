@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     return new (P || (P = Promise))(function (resolve, reject) {
         function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
@@ -15,17 +15,17 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-//------------------------------------------------------
+// ------------------------------------------------------
 // ライブラリ定義
-//------------------------------------------------------
+// ------------------------------------------------------
 const Alexa = __importStar(require("ask-sdk"));
 /**
  * 応答を組み立てるためのライブラリ
  */
-const util = require('util');
-//------------------------------------------------------
+const util = require("util");
+// ------------------------------------------------------
 // 変数・定数定義
-//------------------------------------------------------
+// ------------------------------------------------------
 /**
  * メッセージ格納変数
  */
@@ -45,21 +45,19 @@ const ER_SUCCESS_MATCH = "ER_SUCCESS_MATCH";
  * @type {string}
  */
 const ER_SUCCESS_NO_MATCH = "ER_SUCCESS_NO_MATCH";
-//------------------------------------------------------
+// ------------------------------------------------------
 let skill;
 /* LAMBDA SETUP */
-exports.handler = function (event, context) {
-    return __awaiter(this, void 0, void 0, function* () {
-        console.log(JSON.stringify(event, null, 2));
-        if (!skill) {
-            skill = Alexa.SkillBuilders.custom()
-                .addRequestHandlers(LaunchRequestHandler, HelpHandler, ExitHandler, SessionEndedRequestHandler)
-                .addErrorHandlers(ErrorHandler)
-                .create();
-        }
-        return skill.invoke(event, context);
-    });
-};
+exports.handler = (event, context) => __awaiter(this, void 0, void 0, function* () {
+    console.log(JSON.stringify(event, null, 2));
+    if (!skill) {
+        skill = Alexa.SkillBuilders.custom()
+            .addRequestHandlers(LaunchRequestHandler, TypeRequestHandler, HelpHandler, ExitHandler, SessionEndedRequestHandler)
+            .addErrorHandlers(ErrorHandler)
+            .create();
+    }
+    return skill.invoke(event, context);
+});
 /* INTENT HANDLERS */
 const LaunchRequestHandler = {
     canHandle(handlerInput) {
@@ -77,10 +75,10 @@ const LaunchRequestHandler = {
 const TypeRequestHandler = {
     canHandle(handlerInput) {
         const request = handlerInput.requestEnvelope.request;
-        return request.type === 'IntentRequest' && (request.intent.name === 'TypeIntent');
+        return request.type === "IntentRequest" && (request.intent.name === "TypeIntent");
     },
     handle(handlerInput) {
-        //GET REQUEST ATTRIBUTE
+        // GET REQUEST ATTRIBUTE
         const req = handlerInput.requestEnvelope.request;
         const slot = req.intent.slots.FurinType;
         const response = handlerInput.responseBuilder;
@@ -98,13 +96,13 @@ const TypeRequestHandler = {
                 .reprompt(MESSAGE.error.reprompt)
                 .getResponse();
         }
-    }
+    },
 };
 const HelpHandler = {
     canHandle(handlerInput) {
         const request = handlerInput.requestEnvelope.request;
-        return request.type === 'IntentRequest' && (request.intent.name === 'AMAZON.HelpIntent' ||
-            request.intent.name === 'AMAZON.HelpHandler');
+        return request.type === "IntentRequest" && (request.intent.name === "AMAZON.HelpIntent" ||
+            request.intent.name === "AMAZON.HelpHandler");
     },
     handle(handlerInput) {
         return handlerInput.responseBuilder
@@ -117,8 +115,8 @@ const ExitHandler = {
     canHandle(handlerInput) {
         const attributes = handlerInput.attributesManager.getSessionAttributes();
         const request = handlerInput.requestEnvelope.request;
-        return request.type === `IntentRequest` && (request.intent.name === 'AMAZON.StopIntent' ||
-            request.intent.name === 'AMAZON.CancelIntent');
+        return request.type === `IntentRequest` && (request.intent.name === "AMAZON.StopIntent" ||
+            request.intent.name === "AMAZON.CancelIntent");
     },
     handle(handlerInput) {
         return handlerInput.responseBuilder
@@ -129,7 +127,7 @@ const ExitHandler = {
 const SessionEndedRequestHandler = {
     canHandle(handlerInput) {
         console.log("Inside SessionEndedRequestHandler");
-        return handlerInput.requestEnvelope.request.type === 'SessionEndedRequest';
+        return handlerInput.requestEnvelope.request.type === "SessionEndedRequest";
     },
     handle(handlerInput) {
         console.log(`Session ended with reason: ${JSON.stringify(handlerInput.requestEnvelope)}`);
