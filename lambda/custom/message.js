@@ -22,3 +22,4 @@ module.exports = {
         "otaru": "小樽の風鈴でした"
     }
 };
+//# sourceMappingURL=message.js.map

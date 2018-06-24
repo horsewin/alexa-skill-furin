@@ -35,10 +35,22 @@ const MESSAGE = require("./message");
  * @type {string[]}
  */
 const furin = ["daiso", "nanbu_mie", "nousaku", "otaru"];
+/**
+ * エンティティ解決時の成功コード
+ * @type {string}
+ */
+const ER_SUCCESS_MATCH = "ER_SUCCESS_MATCH";
+/**
+ * エンティティ解決時の失敗コード
+ * @type {string}
+ */
+const ER_SUCCESS_NO_MATCH = "ER_SUCCESS_NO_MATCH";
+//------------------------------------------------------
 let skill;
 /* LAMBDA SETUP */
 exports.handler = function (event, context) {
     return __awaiter(this, void 0, void 0, function* () {
+        console.log(JSON.stringify(event, null, 2));
         if (!skill) {
             skill = Alexa.SkillBuilders.custom()
                 .addRequestHandlers(LaunchRequestHandler, HelpHandler, ExitHandler, SessionEndedRequestHandler)
@@ -70,11 +82,22 @@ const TypeRequestHandler = {
     handle(handlerInput) {
         //GET REQUEST ATTRIBUTE
         const req = handlerInput.requestEnvelope.request;
-        const slot = req.intent.slots;
-        if (slot && slot.FurinType) {
-            const value = slot.FurinType.value;
-        }
+        const slot = req.intent.slots.FurinType;
         const response = handlerInput.responseBuilder;
+        if (CustomValidator(slot)) {
+            const value = slot.resolutions &&
+                slot.resolutions.resolutionsPerAuthority[0].values[0].value.name
+                || slot.value;
+            return response
+                .speak(util(MESSAGE.login.speak, value, MESSAGE.furin[value]))
+                .getResponse();
+        }
+        else {
+            return response
+                .speak(MESSAGE.error.speak)
+                .reprompt(MESSAGE.error.reprompt)
+                .getResponse();
+        }
     }
 };
 const HelpHandler = {
@@ -126,5 +149,28 @@ const ErrorHandler = {
             .reprompt(MESSAGE.error.reprompt)
             .getResponse();
     },
+};
+/**
+ *
+ * @param slot
+ * @returns {boolean}
+ */
+const CustomValidator = (slot) => {
+    if (slot && slot.resolutions) {
+        return slot.resolutions.resolutionsPerAuthority[0].status.code === ER_SUCCESS_MATCH;
+    }
+    else if (slot && slot.value) {
+        return true;
+    }
+    return false;
+};
+/**
+ *
+ * @param slot
+ * @returns {*|boolean}
+ * @constructor
+ */
+const Validator = (slot) => {
+    return slot && slot.value && slot.value !== "?";
 };
 //# sourceMappingURL=index.js.map
