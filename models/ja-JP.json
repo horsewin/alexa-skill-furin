@@ -2,6 +2,68 @@
   "interactionModel": {
     "languageModel": {
       "invocationName": "風鈴の音",
+      "types": [
+        {
+          "name": "FURIN_TYPE",
+          "values": [
+            {
+              "name": {
+                "value": "南部鉄器",
+                "synonyms": [
+                  "南部",
+                  "なんぶてっき",
+                  "鉄",
+                  "てつ",
+                  "てっき",
+                  "なんぶ",
+                  "三重",
+                  "みえ"
+                ]
+              }
+            },
+            {
+              "name": {
+                "value": "能作風鈴",
+                "synonyms": [
+                  "のうさく",
+                  "能作",
+                  "のうさくふうりん",
+                  "のうさくフウリン",
+                  "のーさく"
+                ]
+              }
+            },
+            {
+              "name": {
+                "value": "小樽",
+                "synonyms": [
+                  "おたる",
+                  "オタル",
+                  "北海道",
+                  "ほっかいどう",
+                  "がらす",
+                  "ガラス"
+                ]
+              }
+            },
+            {
+              "name": {
+                "value": "ダイソー",
+                "synonyms": [
+                  "だいそー",
+                  "ひゃっきん",
+                  "百均",
+                  "100円",
+                  "ひゃくえん",
+                  "ひゃくえん",
+                  "安いやつ",
+                  "安い"
+                ]
+              }
+            }
+          ]
+        }
+      ],
       "intents": [
         {
           "name": "AMAZON.CancelIntent",
@@ -39,6 +101,31 @@
         {
           "name": "AMAZON.StopIntent",
           "samples": []
+        },
+        {
+          "name": "TypeIntent",
+          "slots": [
+            {
+              "name": "FurinType",
+              "type": "FURIN_TYPE"
+            }
+          ],
+          "samples": [
+            "{FurinType} の音を聞かせて",
+            "{FurinType} のおとを聞かせて",
+            "{FurinType} のねを聞かせて",
+            "{FurinType} の音を聞きたい",
+            "{FurinType} の音をききたい",
+            "{FurinType} のねをききたい",
+            "{FurinType} の音",
+            "{FurinType} のね",
+            "風鈴が {FurinType}",
+            "ふうりんが {FurinType}",
+            "フーリンが {FurinType}",
+            "風鈴は {FurinType}",
+            "ふうりんは {FurinType}",
+            "フーリンは {FurinType}"
+          ]
         }
       ]
     }
