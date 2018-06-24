@@ -1,17 +1,46 @@
+/* eslint-disable  func-names */
+/* eslint-disable  no-console */
+/* eslint-disable  no-restricted-syntax */
+
 'use strict';
-var Alexa = require("alexa-sdk");
+const Alexa = require('ask-sdk-core');
 
-// For detailed tutorial on how to making a Alexa skill,
-// please visit us at http://alexa.design/build
+/* LAMBDA SETUP */
+exports.handler = skillBuilder
+    .addRequestHandlers(
+        LaunchRequestHandler,
+        QuizHandler,
+        DefinitionHandler,
+        QuizAnswerHandler,
+        RepeatHandler,
+        HelpHandler,
+        ExitHandler,
+        SessionEndedRequestHandler
+    )
+    .addErrorHandlers(ErrorHandler)
+    .lambda();
 
+/* INTENT HANDLERS */
+const LaunchRequestHandler = {
+    canHandle(handlerInput) {
+        return handlerInput.requestEnvelope.request.type === `LaunchRequest`;
+    },
+    handle(handlerInput) {
+        return handlerInput.responseBuilder
+            .speak(welcomeMessage)
+            .reprompt(helpMessage)
+            .getResponse();
+    },
+};
 
 exports.handler = function(event, context) {
-    var alexa = Alexa.handler(event, context);
-    alexa.registerHandlers(handlers);
+    const alexa = Alexa.handler(event, context);
+    alexa.appId = process.env.APP_ID;
+    alexa.registerHandlers(LaunchRequestHandler);
     alexa.execute();
 };
 
-var handlers = {
+const LaunchRequestHandler = {
     'LaunchRequest': function () {
         this.emit('SayHello');
     },
@@ -27,7 +56,7 @@ var handlers = {
         this.emit(':responseReady');
     },
     'SayHelloName': function () {
-        var name = this.event.request.intent.slots.name.value;
+        const name = this.event.request.intent.slots.name.value;
         this.response.speak('Hello ' + name)
             .cardRenderer('hello world', 'hello ' + name);
         this.emit(':responseReady');

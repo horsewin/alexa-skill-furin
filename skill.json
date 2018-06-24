@@ -14,8 +14,8 @@
         }
       },
       "isAvailableWorldwide": true,
-      "testingInstructions": "Sample Testing Instructions.",
-      "category": "EDUCATION_AND_REFERENCE",
+      "testingInstructions": "1) 'アレクサ、風鈴の音を開いて'と言って",
+      "category": "HEALTH_AND_FITNESS",
       "distributionCountries": []
     },
     "apis": {
