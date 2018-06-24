@@ -19,10 +19,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 // ライブラリ定義
 // ------------------------------------------------------
 const Alexa = __importStar(require("ask-sdk"));
-/**
- * 応答を組み立てるためのライブラリ
- */
-const util = require("util");
+const util = __importStar(require("util"));
 // ------------------------------------------------------
 // 変数・定数定義
 // ------------------------------------------------------
@@ -67,10 +64,9 @@ const LaunchRequestHandler = {
     handle(handlerInput) {
         const num = Math.floor((Math.random() * 4));
         const targetFurin = furin[num];
-        console.log(`${targetFurin}`);
         const description = MESSAGE.furin[targetFurin];
         return handlerInput.responseBuilder
-            .speak(util(MESSAGE.login.speak, targetFurin, description))
+            .speak(util.format(MESSAGE.login.speak, targetFurin, description))
             .getResponse();
     },
 };
@@ -89,7 +85,7 @@ const TypeRequestHandler = {
                 slot.resolutions.resolutionsPerAuthority[0].values[0].value.name
                 || slot.value;
             return response
-                .speak(util(MESSAGE.login.speak, value, MESSAGE.furin[value]))
+                .speak(util.format(MESSAGE.login.speak, value, MESSAGE.furin[value]))
                 .getResponse();
         }
         else {

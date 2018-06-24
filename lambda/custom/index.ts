@@ -5,11 +5,7 @@
 // ------------------------------------------------------
 import * as Alexa from "ask-sdk";
 import {IntentRequest, RequestEnvelope} from "ask-sdk-model";
-
-/**
- * 応答を組み立てるためのライブラリ
- */
-const util = require("util");
+import * as util from "util";
 
 // ------------------------------------------------------
 // 変数・定数定義
@@ -67,12 +63,11 @@ const LaunchRequestHandler = {
   },
   handle(handlerInput: Alexa.HandlerInput) {
     const num = Math.floor((Math.random() * 4));
-    const targetFurin = furin[num];
-    console.log(`${targetFurin}`);
-    const description = MESSAGE.furin[targetFurin];
+    const targetFurin: string = furin[num];
+    const description: string = MESSAGE.furin[targetFurin];
 
     return handlerInput.responseBuilder
-      .speak(util(MESSAGE.login.speak, targetFurin, description))
+      .speak(util.format(MESSAGE.login.speak, targetFurin, description))
       .getResponse();
   },
 };
@@ -96,7 +91,7 @@ const TypeRequestHandler = {
         || slot.value;
 
       return response
-        .speak(util(MESSAGE.login.speak, value, MESSAGE.furin[value]))
+        .speak(util.format(MESSAGE.login.speak, value, MESSAGE.furin[value]))
         .getResponse();
     } else {
       return response
