@@ -1,0 +1,46 @@
+{
+  "interactionModel": {
+    "languageModel": {
+      "invocationName": "風鈴の音",
+      "intents": [
+        {
+          "name": "AMAZON.CancelIntent",
+          "samples": [
+            "終了",
+            "おわり",
+            "ログアウト",
+            "クローズ",
+            "ありがとう",
+            "いいよ",
+            "もういいよ",
+            "とじて",
+            "とじる",
+            "ばいばい",
+            "バイバイ",
+            "じゃあね"
+          ]
+        },
+        {
+          "name": "AMAZON.HelpIntent",
+          "samples": [
+            "ヘルプを教えて",
+            "問い合わせ",
+            "FAQ",
+            "わからない",
+            "助けて",
+            "教えて",
+            "ヘルプミー",
+            "意味不明",
+            "いみふ",
+            "イミフ",
+            "ヘルプ"
+          ]
+        },
+        {
+          "name": "AMAZON.StopIntent",
+          "samples": []
+        }
+      ]
+    }
+  }
+}
